@@ -119,6 +119,7 @@ Live Camera Input
 # 📁 Project Structure
 
 Violence-Detection/
+
 ├── app.py
 ├── Polygon_Violence.pt
 ├── punch_kick.pt
