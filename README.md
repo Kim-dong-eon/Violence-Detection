@@ -124,7 +124,7 @@ YOLO 기반 폭력 탐지 및 Punch/Kick 동작 분석 모델을 직접 설계·
 
 ---
 
-## 👨‍💻 My Role in the Project
+# 👨‍💻 My Role in the Project
   
 AI Model Development & System Integration
 
