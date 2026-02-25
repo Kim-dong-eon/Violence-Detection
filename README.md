@@ -119,16 +119,16 @@ Live Camera Input
 # 📁 Project Structure
 
 Violence-Detection/
-├── app.py  
-├── Polygon_Violence.pt  
-├── punch_kick.pt  
-├── templates/  
-│   ├── index.html  
-│   ├── cctv.html  
-│   └── videos.html  
-└── static/  
-    ├── css/  
-    └── js/  
+├── app.py
+├── Polygon_Violence.pt
+├── punch_kick.pt
+├── templates/
+│   ├── index.html
+│   ├── cctv.html
+│   └── videos.html
+└── static/
+    ├── css/
+    └── js/
 
 ---
 Roboflow 및 AI-Hub 데이터를 활용하여  
