@@ -8,19 +8,6 @@ YOLO 기반 실시간 폭력 상황 탐지 및 동작 분석 AI 시스템
 
 ---
 
-## 👨‍💻 Developer
-
-**김동언**  
-AI Model Development & System Integration
-
-- YOLO 기반 폭력 탐지 모델 학습
-- Punch/Kick 동작 탐지 모델 구축
-- 데이터 전처리 및 라벨 구조 설계
-- 실시간 추론 최적화 및 임계값 튜닝
-- 2단계 탐지 파이프라인 설계
-
----
-
 # 📌 Project Overview
 
 본 시스템은 다음 기능을 제공합니다:
@@ -134,3 +121,17 @@ Violence-Detection/
 Roboflow 및 AI-Hub 데이터를 활용하여  
 YOLO 기반 폭력 탐지 및 Punch/Kick 동작 분석 모델을 직접 설계·학습하고  
 실시간 CCTV 모니터링 시스템에 적용한 AI 프로젝트입니다.
+
+---
+
+## 👨‍💻 My Role in the Project
+  
+AI Model Development & System Integration
+
+- YOLO 기반 폭력 탐지 모델 학습
+- Punch/Kick 동작 탐지 모델 구축
+- 데이터 전처리 및 라벨 구조 설계
+- 실시간 추론 최적화 및 임계값 튜닝
+- 2단계 탐지 파이프라인 설계
+
+수행자 [김동언]
