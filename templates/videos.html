@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영상 저장소</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .button-container {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #45a049;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Severity 색상 정의 */
+        .severity-none {
+            color: #4CAF50;
+            /* Green */
+        }
+
+        .severity-light {
+            color: #FFA500;
+            /* Orange */
+        }
+
+        .severity-medium {
+            color: #FF5733;
+            /* Dark Orange */
+        }
+
+        .severity-severe {
+            color: #FF0000;
+            /* Red */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>영상 저장소</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>파일명</th>
+                <th>영상</th>
+                <th>Severity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for video in video_files %}
+            <tr>
+                <td>{{ video.filename }}</td>
+                <td>
+                    <video controls>
+                        <source src="{{ url_for('video', filename=video.filename) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </td>
+                <td class="{% if video.severity == '치명상' %}severity-severe
+                           {% elif video.severity == '중상' %}severity-medium
+                           {% elif video.severity == '경상' %}severity-light
+                           {% else %}severity-none{% endif %}">
+                    {{ video.severity }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="container">
+        <div class="button-container">
+            <button onclick="navigateTo('home')">홈으로 돌아가기</button>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(page) {
+            if (page === 'home') {
+                window.location.href = '/'; // 홈 페이지로 이동
+            }
+        }
+    </script>
+</body>
+
+</html>

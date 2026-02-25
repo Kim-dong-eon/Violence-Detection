@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안전 모니터링 시스템</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>당신의 안전을 위해 돕겠습니다</h1>
+        <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="안전 이미지" class="center-image">
+        <div class="button-container">
+            <button onclick="navigateTo('cctv')">CCTV 바로가기</button>
+            <button onclick="navigateTo('videos')">녹화 영상</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

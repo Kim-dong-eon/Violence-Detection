@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CCTV</title>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f2f2f2, #e6e6e6);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .center-image {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #progress-bar {
+            width: 80%;
+            background-color: #f3f3f3;
+            border: 1px solid #ccc;
+            height: 30px;
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* 알림 스타일 */
+        .notification {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            right: 30px;
+            bottom: 30px;
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        .notification.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* 추가 스타일 */
+        .full-screen-btn {
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Safety Camera</h2>
+        <img src="{{ url_for('video_feed') }}" alt="Live Feed" class="center-image" id="videoFeed">
+
+        <button class="full-screen-btn" onclick="toggleFullScreen()">전체 화면</button>
+        <h3>폭력 상황 탐지율</h3>
+        <div id="progress-bar">
+            <div id="progress">0%</div>
+        </div>
+
+        <div class="button-container">
+            <button onclick="navigateTo('home')">홈으로 돌아가기</button>
+        </div>
+    </div>
+
+    <!-- 알림 요소 -->
+    <div id="notification" class="notification">
+        폭력이 발생했습니다.
+    </div>
+
+    <script>
+        var socket = io();
+
+        function toggleFullScreen() {
+            var elem = document.getElementById('videoFeed');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // 음성 알림 상태 추적
+        let alertTriggered = false;
+
+        // 서버로부터 진행 상태 업데이트
+        socket.on('progress', function (data) {
+            var detectionCount = data.detection_count;
+            var progressPercentage = (detectionCount /12) * 100;
+            progressPercentage = Math.min(progressPercentage, 100); // Cap at 100%
+
+            var progressBar = document.getElementById('progress');
+            progressBar.style.width = progressPercentage + '%';
+            progressBar.textContent = Math.floor(progressPercentage) + '%';
+
+            // 100%에 도달하면 음성 알림 트리거
+            if (progressPercentage >= 100 && !alertTriggered) {
+                alertTriggered = true;
+                console.log("Alert triggered! Playing voice alert.");
+                showNotification();
+                triggerVoiceAlert(); // 음성 알림 요청
+            }
+        });
+
+        // 서버에서 진행 상태 초기화
+        socket.on('reset_progress', function () {
+            var progressBar = document.getElementById('progress');
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            console.log("Progress reset. Ready for new detections.");
+            alertTriggered = false; // 플래그 초기화
+        });
+
+        // 알림 표시
+        function showNotification() {
+            var notification = document.getElementById('notification');
+            notification.classList.add('show');
+
+            // 3초 후 알림 숨기기
+            setTimeout(function () {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // 음성 알림 트리거
+        function triggerVoiceAlert() {
+            fetch('/trigger_alert', {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    console.log("Voice alert triggered successfully.");
+                } else {
+                    console.error('Failed to trigger voice alert');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function navigateTo(page) {
+            if (page === 'home') {
+                window.location.href = '/'; // 홈 페이지로 이동
+            }
+        }
+    </script>
+
+</body>
+
+</html>
