@@ -118,12 +118,12 @@ Violence-Detection/
     ├── css/
     └── js/
 ---
+---
 Roboflow 및 AI-Hub 데이터를 활용하여  
 YOLO 기반 폭력 탐지 및 Punch/Kick 동작 분석 모델을 직접 설계·학습하고  
 실시간 CCTV 모니터링 시스템에 적용한 AI 프로젝트입니다.
 
 ---
-Roboflow ...
 
 # 👨‍💻 My Role in the Project
   
